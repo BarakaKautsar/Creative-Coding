@@ -17,9 +17,11 @@ class Shape {
   }
 
   move() {
+    //changing position with speed vector
     this.x += this.speed.x;
     this.y += this.speed.y;
 
+    // bouncing on the edges
     if (this.x + this.r / 2 > width || this.x - this.r / 2 < 0) {
       this.speed.x *= -1;
     }
@@ -48,6 +50,7 @@ class Shape {
 function setup() {
   createCanvas(400, 400);
   for (let i = 0; i < 5; i++) {
+    // making 5 shapes
     let shape = new Shape(random(width), random(height), random(50, 70));
     shapes.push(shape);
   }
@@ -57,12 +60,14 @@ function draw() {
   background(250);
 
   for (let i = 0; i < shapes.length; i++) {
+    // display and move all shapes
     shapes[i].display();
     shapes[i].move();
   }
 }
 
 function mouseClicked() {
+  // when mouse is clicked, check if it is inside shape and change speed
   for (let i = 0; i < shapes.length; i++) {
     if (shapes[i].insideShape(mouseX, mouseY)) {
       shapes[i].changeSpeed();
