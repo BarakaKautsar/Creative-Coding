@@ -1,11 +1,22 @@
 from fastapi import FastAPI
 from wordle_bot import guess_word, initialize, QLearner, Grader, Interpreter
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 
 app = FastAPI()
 
-initialized = False  
+# CORS middleware configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Update this to restrict origins if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+initialized = False 
 interpreter = None
 qlearner = None
 grader = None
@@ -13,13 +24,11 @@ grader = None
 
 def initialize_once():
     global interpreter, qlearner, grader, initialized
-    print("initialized: ", initialized)
+    # print("initialized: ", initialized)
     if not initialized:
         print("Initializing")
         interpreter, qlearner, grader = initialize()
         initialized = True
-    else:
-        print("Already initialized")
 
 @app.get("/")
 def read_root():
@@ -28,7 +37,6 @@ def read_root():
 @app.get("/guess/{word}")
 def read_item(word: str):
     global interpreter, qlearner, grader, initialized
-    print("word: ", word)
     initialize_once()
     guesses, interpreter, qlearner, grader = guess_word(word, interpreter, qlearner, grader)
     return {"guesses": guesses, "target": word}

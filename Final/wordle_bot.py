@@ -1,9 +1,9 @@
-import pickle
 import numpy as np
 import random
 from scipy.sparse import csr_matrix
 from sklearn.cluster import SpectralClustering
 from typing import Tuple
+import pickle
 
 class Interpreter():
   def __init__(self, k=5):
@@ -31,6 +31,15 @@ class Interpreter():
   def save_similarity_graph(self):
     self.G_full = self.G.copy()
     self.G_csr_full = self.G_csr.copy()
+    with open("graph.pkl", 'wb') as file:
+      pickle.dump(self.G_full, file)
+
+  def load_similarity_graph(self):
+    with open("graph.pkl", 'rb') as file:
+      self.G_full = pickle.load(file)
+      self.G_csr_full = csr_matrix(self.G_full)
+      self.G = self.G_full.copy()
+      self.G_csr = self.G_csr_full.copy()
 
   def make_clusters(self):
     if len(self.words)>self.k:
@@ -186,18 +195,16 @@ class Grader():
       else:
         feedback[i]=0
     return feedback
-  
 
 def initialize():
   interpreter = Interpreter()
-  interpreter.make_similarity_graph()
-  interpreter.save_similarity_graph()
+  interpreter.load_similarity_graph()
   qlearner = QLearner()
   grader = Grader()
   return interpreter, qlearner, grader
 
 def guess_word(word, interpreter, qlearner, grader):
-  print("Guessing word: ", word)
+  # print("Guessing word: ", word)
   guesses = []
   grader.set_word(word)
   won=False
@@ -224,5 +231,8 @@ def guess_word(word, interpreter, qlearner, grader):
   return guesses, interpreter, qlearner, grader
 
 
-# if __name__ == "__main__":
-#     interpreter, qlearner, grader = initialize()
+if __name__ == "__main__":
+  word = "trace"
+  interpreter, qlearner, grader = initialize()
+  guesses, interpreter, qlearner, grader = guess_word(word, interpreter, qlearner, grader)
+  print(guesses)
