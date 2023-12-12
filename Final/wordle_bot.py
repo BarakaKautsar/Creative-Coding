@@ -1,3 +1,5 @@
+#code source: https://github.com/danschauder/wordlebot/blob/main/Wordle_Bot.ipynb
+
 import numpy as np
 import random
 from scipy.sparse import csr_matrix
@@ -231,8 +233,8 @@ def guess_word(word, interpreter, qlearner, grader):
   return guesses, interpreter, qlearner, grader
 
 
-if __name__ == "__main__":
-  word = "trace"
-  interpreter, qlearner, grader = initialize()
-  guesses, interpreter, qlearner, grader = guess_word(word, interpreter, qlearner, grader)
-  print(guesses)
+# if __name__ == "__main__":
+#   word = "trace"
+#   interpreter, qlearner, grader = initialize()
+#   guesses, interpreter, qlearner, grader = guess_word(word, interpreter, qlearner, grader)
+#   print(guesses)

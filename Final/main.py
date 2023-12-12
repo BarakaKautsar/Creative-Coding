@@ -1,3 +1,5 @@
+# tutorial watched: https://www.youtube.com/watch?v=h5wLuVDr0oc&t=905s
+
 from fastapi import FastAPI
 from wordle_bot import guess_word, initialize, QLearner, Grader, Interpreter
 from fastapi.middleware.cors import CORSMiddleware
